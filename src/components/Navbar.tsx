@@ -2,8 +2,9 @@ import { Paper, BottomNavigation, BottomNavigationAction } from '@mui/material'
 import { useState } from 'react'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
+import CalculateIcon from '@mui/icons-material/Calculate'
 
 export const Navbar = () => {
     const [value, setValue] = useState(0)
@@ -21,6 +22,11 @@ export const Navbar = () => {
                         to={'/bolus'}
                         component={NavLink}
                         icon={<FormatListBulletedIcon />}
+                    />
+                    <BottomNavigationAction
+                        to={'/calculator'}
+                        component={NavLink}
+                        icon={<CalculateIcon />}
                     />
                 </BottomNavigation>
             </Paper>

@@ -7,6 +7,7 @@ import { Navbar } from './components/Navbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Root } from './components/Root'
 import { ListBolus } from './components/ListBolus'
+import { InsulinCalculator } from './components/InsulinCalculator'
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             {
                 path: '/bolus',
                 element: <ListBolus />
+            },
+            {
+                path: '/calculator',
+                element: <InsulinCalculator />
             }
         ]
     }

@@ -1,20 +1,31 @@
 import * as ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import store from './store'
-import { InputBolus } from './InputBolus'
-import { DailyView } from './DailyView'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
-const persistor = persistStore(store)
+import { Navbar } from './components/Navbar'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Root } from './components/Root'
+import { ListBolus } from './components/ListBolus'
 
-const App = () => {
-    return (
-        <>
-            <InputBolus />
-            <DailyView />
-        </>
-    )
-}
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Navbar />,
+        children: [
+            {
+                path: '/', // yes, again
+                element: <Root />
+            },
+            {
+                path: '/bolus',
+                element: <ListBolus />
+            }
+        ]
+    }
+])
+
+const persistor = persistStore(store)
 
 const rootElement = document.getElementById('root')
 
@@ -24,7 +35,7 @@ if (rootElement) {
     root.render(
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <App />
+                <RouterProvider router={router} />
             </PersistGate>
         </Provider>
     )

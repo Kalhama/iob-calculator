@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
 import { useDispatch, useSelector } from 'react-redux'
-import { IRootState } from './store'
-import { deleteBolus } from './store/reducers/bolus'
+import { IRootState } from '../store'
+import { deleteBolus } from '../store/reducers/bolus'
 
-export const BolusList = ({ date }: { date: DateTime }) => {
+export const BolusTable = ({ date }: { date: DateTime }) => {
     const dispatch = useDispatch()
     const bolusInjectionArrayDaySelector = (state: IRootState) => {
         return state.bolusReducer.filter((bolus) => {

@@ -2,23 +2,19 @@ import { Delete } from '@mui/icons-material'
 import { IconButton, List, ListItem, ListItemText, Paper } from '@mui/material'
 import { DateTime } from 'luxon'
 import { useDispatch, useSelector } from 'react-redux'
-import { IRootState } from '../store'
-import { deleteBolus } from '../store/reducers/bolus'
+import { deleteBolus, selectBolusBetween } from '../store/reducers/bolus'
 
 export const BolusTable = ({ date }: { date: DateTime }) => {
     const dispatch = useDispatch()
-    const bolusInjectionArrayDaySelector = (state: IRootState) => {
-        return state.bolusReducer.filter((bolus) => {
-            const bolusDatetime = DateTime.fromISO(bolus.datetime).set({
-                millisecond: 0,
-                second: 0,
-                minute: 0,
-                hour: 0
-            })
-            return bolusDatetime.diff(date).valueOf() === 0
-        })
-    }
-    const bolusInjectionArray = useSelector(bolusInjectionArrayDaySelector)
+
+    const start = date.set({
+        millisecond: 0,
+        second: 0,
+        minute: 0,
+        hour: 0
+    })
+    const end = start.plus({ hours: 24 })
+    const bolusInjectionArray = useSelector(selectBolusBetween(start, end))
 
     return (
         <>

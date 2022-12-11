@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -15,7 +16,9 @@ module.exports = function (env, argv) {
             publicPath: '/'
         },
         devServer: {
-            static: './dist'
+            static: './dist',
+            hot: true,
+            historyApiFallback: true
         },
         module: {
             rules: [

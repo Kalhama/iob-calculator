@@ -31,7 +31,7 @@ export const useDatePicker = (): [date: DateTime, DateTimePicker: () => JSX.Elem
                         </IconButton>
                         <MobileDatePicker
                             label="Change date"
-                            inputFormat="MM/dd/yyyy"
+                            inputFormat="dd.MM.yyyy"
                             value={date}
                             onChange={(e) => setDate(e)}
                             // onChange={handleChange}

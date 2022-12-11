@@ -91,11 +91,12 @@ export const IOBPlot = ({ date }: { date: DateTime }) => {
                     labelFormatter={formatDate}
                 />
                 <Line
-                    type="basis"
+                    type="linear"
                     isAnimationActive={false}
                     dot={false}
                     dataKey="IOB"
-                    stroke="#8884d8"
+                    stroke="#413ea0"
+                    strokeWidth={3}
                 />
             </LineChart>
         </ResponsiveContainer>

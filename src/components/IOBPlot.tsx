@@ -1,7 +1,7 @@
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { DateTime, DurationLike } from 'luxon'
 import { useSelector } from 'react-redux'
-import { IRootState } from './store'
+import { IRootState } from '../store'
 import { useMemo } from 'react'
 
 const useIOB = (start: DateTime, end: DateTime) => {
@@ -71,19 +71,20 @@ export const IOBPlot = ({ date }: { date: DateTime }) => {
         })
 
     return (
-        <ResponsiveContainer width={'100%'} height={'30%'}>
-            <LineChart
-                width={730}
-                height={250}
-                data={consolidatedIOB}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <ResponsiveContainer width={'100%'} height={'85%'}>
+            <LineChart data={consolidatedIOB}>
                 <XAxis
                     scale="time"
                     dataKey="datetime"
                     tickFormatter={formatDate}
                     interval={60 * 3 - 1}
                 />
-                <YAxis />
+                <YAxis
+                    domain={[
+                        (dataMin: number) => Math.floor(dataMin),
+                        (dataMax: number) => Math.max(Math.ceil(dataMax), 4)
+                    ]}
+                />
                 <Tooltip
                     cursor={false}
                     formatter={(value: number) => Math.round(value * 100) / 100}

@@ -9,6 +9,7 @@ import { Root } from './components/Root'
 import { ListBolus } from './components/ListBolus'
 import { InsulinCalculator } from './components/InsulinCalculator'
 import { Settings } from './components/Settings'
+import { Now } from './components/Now'
 
 const router = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 element: <Root />
+            },
+            {
+                path: '/now',
+                element: <Now />
             },
             {
                 path: '/bolus',

@@ -5,6 +5,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import { NavLink } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import CalculateIcon from '@mui/icons-material/Calculate'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 export const Navbar = () => {
     const [value, setValue] = useState(0)
@@ -27,6 +28,11 @@ export const Navbar = () => {
                         to={'/calculator'}
                         component={NavLink}
                         icon={<CalculateIcon />}
+                    />
+                    <BottomNavigationAction
+                        to={'/settings'}
+                        component={NavLink}
+                        icon={<SettingsIcon />}
                     />
                 </BottomNavigation>
             </Paper>

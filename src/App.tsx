@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Root } from './components/Root'
 import { ListBolus } from './components/ListBolus'
 import { InsulinCalculator } from './components/InsulinCalculator'
+import { Settings } from './components/Settings'
 
 const router = createBrowserRouter([
     {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
         element: <Navbar />,
         children: [
             {
-                path: '/', // yes, again
+                path: '/',
                 element: <Root />
             },
             {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
             {
                 path: '/calculator',
                 element: <InsulinCalculator />
+            },
+            {
+                path: '/settings',
+                element: <Settings />
             }
         ]
     }

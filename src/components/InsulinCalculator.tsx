@@ -1,18 +1,21 @@
 import { TextField } from '@mui/material'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useIOB } from '../hooks/useIOB'
+import { IRootState } from '../store'
 import { addBolus } from '../store/reducers/bolus'
 
 const numToStr = (num: number): string => (Math.round(num * 10) / 10).toFixed(1)
 
 export const InsulinCalculator = () => {
+    const { carbRate, adjustmentRate, IOBOffset } = useSelector(
+        (state: IRootState) => state.settings
+    )
+
     const [bloodGlucose, setBloodGlucose] = useState('7')
     const [targetBloodGlucose, setTargetBloodGlucose] = useState('7')
-    const adjustmentRate = 1.5
     const [mealCarbohydrates, setMealCarbohydrates] = useState('0')
-    const carbohydrateRate = 15
     const IOB = useIOB(DateTime.now())
     const dispatch = useDispatch()
 
@@ -20,8 +23,7 @@ export const InsulinCalculator = () => {
         bloodGlucose !== ''
             ? (Number(bloodGlucose) - Number(targetBloodGlucose)) / adjustmentRate
             : NaN
-    const mealInsulin = Number(mealCarbohydrates) / carbohydrateRate
-    const IOBOffset = 1
+    const mealInsulin = Number(mealCarbohydrates) / carbRate
     const totalInsulin = adjustmentInsulin + mealInsulin - IOB + IOBOffset
 
     return (

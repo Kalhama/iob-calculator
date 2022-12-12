@@ -20,7 +20,10 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 export const InputBolus = () => {
     const [open, setOpen] = useState(false)
     const handleClose = () => setOpen(false)
-    const handleOpen = () => setOpen(true)
+    const handleOpen = () => {
+        setDatetime(DateTime.now())
+        setOpen(true)
+    }
 
     const [datetime, setDatetime] = useState(DateTime.now())
     const [bolus, setBolus] = useState('0')

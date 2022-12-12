@@ -17,11 +17,11 @@ const router = createBrowserRouter([
         element: <Navbar />,
         children: [
             {
-                path: '/',
+                path: '/daily',
                 element: <Root />
             },
             {
-                path: '/now',
+                path: '/',
                 element: <Now />
             },
             {

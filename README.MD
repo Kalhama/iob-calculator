@@ -18,4 +18,8 @@ Please use this just for demonstration purposes. This is not a medical software 
 
 Hosted on [https://iob.kalhama.fi/](https://iob.kalhama.fi/)
 
-![Picture of the app in use](IOB.png)
+### IOB graph ###
+![IOB Graph](sample_images/graph.png)
+
+### bolus calculator ###
+![Bolus calculator](sample_images/calculator.png)

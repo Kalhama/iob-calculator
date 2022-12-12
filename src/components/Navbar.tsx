@@ -20,12 +20,16 @@ export const Navbar = () => {
                         setValue(newValue)
                     }}>
                     <BottomNavigationAction
-                        to={'/now'}
+                        to={'/'}
                         component={NavLink}
                         icon={<AllInclusiveOutlinedIcon />}
                     />
 
-                    <BottomNavigationAction to={'/'} component={NavLink} icon={<TimelineIcon />} />
+                    <BottomNavigationAction
+                        to={'/daily'}
+                        component={NavLink}
+                        icon={<TimelineIcon />}
+                    />
                     <BottomNavigationAction
                         to={'/bolus'}
                         component={NavLink}

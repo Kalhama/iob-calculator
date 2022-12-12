@@ -19,7 +19,7 @@ export const useIOBCurve = (start: DateTime, end: DateTime) => {
     const dateRange = (start: DateTime, end: DateTime, interval: DurationLike) => {
         const arr = []
         let cursor = start
-        while (cursor < end) {
+        while (cursor <= end) {
             arr.push(cursor)
             cursor = cursor.plus(interval)
         }

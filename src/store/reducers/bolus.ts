@@ -1,6 +1,6 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { DateTime } from 'luxon'
-import { IRootState } from '..'
+import { IRootState } from '../index'
 
 interface PostBolusInterface {
     datetime: DateTime
@@ -29,6 +29,7 @@ const initialState: BolusInterface[] = []
 export const bolusReducer = createReducer(initialState, (builder) => {
     return builder
         .addCase(addBolus, (state, action) => {
+            // TODO should we round datetime to 60s ?
             if (action.payload.bolus < 0) return
             const id = Math.max(...state.map((bolus) => bolus.id), 0) + 1
             state.push({

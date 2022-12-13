@@ -58,10 +58,7 @@ export const Graph = ({ data, domain }: IProps) => {
     }, [zoomedXDomain, data])
 
     const filteredYDomain = useMemo<Tuple<number>>(() => {
-        return [
-            _.minBy(filteredData, (d) => d.y).y,
-            Math.max(4, _.maxBy(filteredData, (d) => d.y).y)
-        ]
+        return [0, Math.max(4, _.maxBy(filteredData, (d) => d.y).y)]
     }, [filteredData])
 
     const handleJumpToDate = (date: DateTime) => {

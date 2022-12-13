@@ -1,11 +1,11 @@
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { DateTime } from 'luxon'
-import { useIOBCurve } from '../hooks/useIOB'
+import { useIOBCurveLegacy } from '../hooks/useIOB'
 
-export const IOBPlot = ({ date }: { date: DateTime }) => {
+export const RechartsIOBPlot = ({ date }: { date: DateTime }) => {
     const start = date.set({ second: 0, millisecond: 0, minute: 0, hour: 0 })
     const end = start.plus({ hours: 24 })
-    const [consolidatedIOB] = useIOBCurve(start, end)
+    const [consolidatedIOB] = useIOBCurveLegacy(start, end)
 
     const formatDate = (date: Date) =>
         DateTime.fromJSDate(date).toLocaleString({

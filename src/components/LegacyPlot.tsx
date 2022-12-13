@@ -1,17 +1,17 @@
 import { InputBolus } from './InputBolus'
-import { IOBPlot } from './IOBPlot'
+import { RechartsIOBPlot } from './RechartsIOBPlot'
 import { DatePicker } from './Datepicker'
 import { useState } from 'react'
 import { DateTime } from 'luxon'
 
-export const Root = () => {
+export const LegacyPlot = () => {
     const now = DateTime.now().set({ millisecond: 0, minute: 0, hour: 0 })
     const [date, setDate] = useState(now)
 
     return (
         <>
             <DatePicker date={date} onChange={setDate} />
-            <IOBPlot date={date} />
+            <RechartsIOBPlot date={date} />
             <InputBolus />
         </>
     )

@@ -5,11 +5,11 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 import { Navbar } from './components/Navbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Root } from './components/Root'
+import { LegacyPlot } from './components/LegacyPlot'
 import { ListBolus } from './components/ListBolus'
 import { InsulinCalculator } from './components/InsulinCalculator'
 import { Settings } from './components/Settings'
-import { Now } from './components/Now'
+import { VictoryIOBPlot } from './components/VictoryIOBPlot'
 
 const router = createBrowserRouter([
     {
@@ -17,12 +17,12 @@ const router = createBrowserRouter([
         element: <Navbar />,
         children: [
             {
-                path: '/daily',
-                element: <Root />
+                path: '/legacy',
+                element: <LegacyPlot />
             },
             {
                 path: '/',
-                element: <Now />
+                element: <VictoryIOBPlot />
             },
             {
                 path: '/bolus',

@@ -1,9 +1,7 @@
 import { DateTime } from 'luxon'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { addBolus } from '../store/reducers/bolus'
-import Fab from '@mui/material/Fab'
-import AddIcon from '@mui/icons-material/Add'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+
 import {
     Button,
     Dialog,
@@ -11,13 +9,17 @@ import {
     DialogContent,
     DialogActions,
     TextField,
-    Stack
+    Stack,
+    IconButton
 } from '@mui/material'
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
-import { LocalizationProvider } from '@mui/x-date-pickers'
+import { LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers'
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 
-export const InputBolus = () => {
+interface IProps {
+    onSubmit?: (data: DateTime) => unknown
+}
+
+export const JumpToDate = ({ onSubmit }: IProps) => {
     const [open, setOpen] = useState(false)
     const handleClose = () => setOpen(false)
     const handleOpen = () => {
@@ -26,33 +28,24 @@ export const InputBolus = () => {
     }
 
     const [datetime, setDatetime] = useState(DateTime.now())
-    const [bolus, setBolus] = useState('0')
-    const dispatch = useDispatch()
 
     const handleSubmit = () => {
-        if (bolus === '0') return
-        dispatch(
-            addBolus({
-                datetime: datetime,
-                bolus: Number(bolus)
-            })
-        )
-
+        if (typeof onSubmit === 'function') onSubmit(datetime)
         handleClose()
     }
 
     return (
         <>
-            <Fab
+            <IconButton
                 onClick={handleOpen}
-                sx={{ position: 'fixed', right: '2em', bottom: '6em' }}
                 color="primary"
-                aria-label="add">
-                <AddIcon />
-            </Fab>
+                aria-label="jump to date"
+                component="label">
+                <CalendarMonthIcon />
+            </IconButton>
             <div>
                 <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Insert bolus</DialogTitle>
+                    <DialogTitle>Jump to date</DialogTitle>
                     <DialogContent>
                         <Stack
                             direction="row"
@@ -60,8 +53,13 @@ export const InputBolus = () => {
                             alignItems="center"
                             spacing={1}>
                             <LocalizationProvider dateAdapter={AdapterLuxon}>
-                                <MobileTimePicker
-                                    label="Time"
+                                <StaticDatePicker
+                                    displayStaticWrapperAs="desktop"
+                                    orientation="landscape"
+                                    shouldDisableDate={(day: DateTime) => {
+                                        return DateTime.now().diff(day, 'days').toObject().days < 0
+                                    }}
+                                    openTo="day"
                                     value={datetime}
                                     onChange={setDatetime}
                                     renderInput={(params) => (
@@ -69,23 +67,11 @@ export const InputBolus = () => {
                                     )}
                                 />
                             </LocalizationProvider>
-                            <TextField
-                                id="standard-number"
-                                label="Number"
-                                type="number"
-                                value={bolus}
-                                onChange={(e) => setBolus(e.target.value)}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                variant="standard"
-                                focused
-                            />
                         </Stack>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handleSubmit}>Save</Button>
+                        <Button onClick={handleSubmit}>Go</Button>
                     </DialogActions>
                 </Dialog>
             </div>

@@ -6,7 +6,6 @@ import { NavLink } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import CalculateIcon from '@mui/icons-material/Calculate'
 import SettingsIcon from '@mui/icons-material/Settings'
-import AllInclusiveOutlinedIcon from '@mui/icons-material/AllInclusiveOutlined'
 
 export const Navbar = () => {
     const [value, setValue] = useState(0)
@@ -19,17 +18,7 @@ export const Navbar = () => {
                     onChange={(event, newValue) => {
                         setValue(newValue)
                     }}>
-                    <BottomNavigationAction
-                        to={'/'}
-                        component={NavLink}
-                        icon={<AllInclusiveOutlinedIcon />}
-                    />
-
-                    <BottomNavigationAction
-                        to={'/daily'}
-                        component={NavLink}
-                        icon={<TimelineIcon />}
-                    />
+                    <BottomNavigationAction to={'/'} component={NavLink} icon={<TimelineIcon />} />
                     <BottomNavigationAction
                         to={'/bolus'}
                         component={NavLink}

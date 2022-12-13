@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import _ from 'lodash'
 import { DateTime } from 'luxon'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { DomainTuple, VictoryChart, VictoryLine, VictoryZoomContainer } from 'victory'
 import { useIOBCurve, useIOB } from '../hooks/useIOB'
 import { InputBolusFab } from './InputBolusFab'
@@ -12,7 +12,15 @@ const maxPoints = 240
 
 export const VictoryIOBPlot = () => {
     const [data, domain] = useIOBCurve()
-    const IOB = useIOB(DateTime.now())
+    const [now, setNow] = useState(DateTime.now())
+    const IOB = useIOB(now)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNow(DateTime.now())
+        }, 1000 * 60)
+        return () => clearInterval(interval)
+    }, [])
 
     return (
         <>
@@ -42,6 +50,16 @@ export const Graph = ({ data, domain }: IProps) => {
         DateTime.now().plus({ hours: 3 }).toJSDate()
     ] as Tuple<Date>
     const [zoomedXDomain, setZoomedXDomain] = useState(initialXDomain)
+
+    const [now, setNow] = useState(new Date())
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNow(new Date())
+        }, 60 * 1000)
+
+        return () => clearInterval(interval)
+    }, [])
 
     const onDomainChange = (domain: { x: DomainTuple; y: DomainTuple }) => {
         setZoomedXDomain(domain.x as Tuple<Date>)
@@ -86,8 +104,8 @@ export const Graph = ({ data, domain }: IProps) => {
                         data: { strokeDasharray: '2 2', strokeWidth: 1, stroke: '#c43a31' }
                     }}
                     data={[
-                        { x: new Date(), y: domain.y[0] },
-                        { x: new Date(), y: domain.y[1] + 1 }
+                        { x: now, y: domain.y[0] },
+                        { x: now, y: domain.y[1] + 1 }
                     ]}
                 />
             </VictoryChart>

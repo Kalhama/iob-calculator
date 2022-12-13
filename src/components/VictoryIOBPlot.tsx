@@ -58,7 +58,7 @@ export const Graph = ({ data, domain }: IProps) => {
     }, [zoomedXDomain, data])
 
     const filteredYDomain = useMemo<Tuple<number>>(() => {
-        return [0, Math.max(4, _.maxBy(filteredData, (d) => d.y).y)]
+        return [0, Math.max(4, _.maxBy(filteredData, (d) => d.y).y + 1)]
     }, [filteredData])
 
     const handleJumpToDate = (date: DateTime) => {
@@ -86,7 +86,7 @@ export const Graph = ({ data, domain }: IProps) => {
                     }}
                     data={[
                         { x: new Date(), y: domain.y[0] },
-                        { x: new Date(), y: domain.y[1] }
+                        { x: new Date(), y: domain.y[1] + 1 }
                     ]}
                 />
             </VictoryChart>

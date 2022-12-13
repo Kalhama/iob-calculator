@@ -99,7 +99,7 @@ export const useIOBCurve = (): [
     }, [bolusData])
 
     const YDomain = useMemo((): Tuple<number> => {
-        const min = 0
+        const min = _.minBy(IOBCurve, (d) => d.y).y
         const max = _.maxBy(IOBCurve, (d) => d.y).y
         return [min, max]
     }, [IOBCurve])

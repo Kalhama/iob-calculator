@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { selectBolusBetween } from '../store/reducers/bolus'
 import { IRootState } from '../store'
 import _ from 'lodash'
+import { getPercentageEffect } from '../FiaspModel'
 
 export declare type Tuple<T> = [T, T]
 
@@ -87,9 +88,8 @@ export const useIOBCurve = (): [
                     .diff(DateTime.fromISO(bolusInjection.datetime), 'minutes')
                     .toObject().minutes
                 const scale = bolusInjection.bolus
-                if (diff < 0) return 0
-                else if (diff > 400) return 0
-                else return IOB(diff) * scale
+
+                return getPercentageEffect(diff) * scale
             })
             return {
                 x: datetime.toJSDate(),

@@ -1,11 +1,16 @@
 import { Delete } from '@mui/icons-material'
 import { IconButton, List, ListItem, ListItemText, Paper } from '@mui/material'
 import { DateTime } from 'luxon'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBolus, selectBolusBetween } from '../store/reducers/bolus'
+import { DatePicker } from './Datepicker'
+import { InputBolusFab } from './InputBolusFab'
 
-export const BolusTable = ({ date }: { date: DateTime }) => {
+export const BolusTable = () => {
     const dispatch = useDispatch()
+    const now = DateTime.now().set({ millisecond: 0, second: 0, minute: 0, hour: 0 })
+    const [date, setDate] = useState(now)
 
     const start = date.set({
         millisecond: 0,
@@ -18,6 +23,7 @@ export const BolusTable = ({ date }: { date: DateTime }) => {
 
     return (
         <>
+            <DatePicker date={date} onChange={setDate} />
             {bolusInjectionArray.map((el) => {
                 return (
                     <Paper sx={{ maxWidth: '20em', margin: '0 auto' }} key={el.id}>
@@ -42,6 +48,7 @@ export const BolusTable = ({ date }: { date: DateTime }) => {
                     </Paper>
                 )
             })}
+            <InputBolusFab />
         </>
     )
 }

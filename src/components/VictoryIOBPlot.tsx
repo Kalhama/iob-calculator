@@ -3,9 +3,10 @@ import _ from 'lodash'
 import { DateTime } from 'luxon'
 import { useMemo, useState } from 'react'
 import { DomainTuple, VictoryChart, VictoryLine, VictoryZoomContainer } from 'victory'
-import { Tuple, useIOBCurve, useIOB } from '../hooks/useIOB'
+import { useIOBCurve, useIOB } from '../hooks/useIOB'
 import { InputBolusFab } from './InputBolusFab'
 import { JumpToDate } from './JumpToDate'
+import { Tuple } from '../types'
 
 const maxPoints = 240
 

@@ -18,12 +18,9 @@ import SaveIcon from '@mui/icons-material/Save'
 
 export const Settings = () => {
     const userSettings = useSelector((state: IRootState) => state.settings)
-
-    const dispatch = useDispatch()
-
     const [settings, changeSettings] = useState(userSettings)
-
     const [fakeLoading, setFakeLoading] = useState(false)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (fakeLoading) {

@@ -1,25 +1,12 @@
-import { DateTime, DurationLike } from 'luxon'
+import { DateTime } from 'luxon'
 import { useSelector } from 'react-redux'
 import { useMemo } from 'react'
 import { selectBolusBetween } from '../store/reducers/bolus'
 import { IRootState } from '../store'
 import _ from 'lodash'
 import { getPercentageEffect } from '../FiaspModel'
-
-export declare type Tuple<T> = [T, T]
-
-const sum = (arr: number[]) => arr.reduce((a, b) => a + b, 0)
-
-// TODO replace https://stackoverflow.com/a/74359688
-const dateRange = (start: DateTime, end: DateTime, interval: DurationLike) => {
-    const arr = []
-    let cursor = start
-    while (cursor <= end) {
-        arr.push(cursor)
-        cursor = cursor.plus(interval)
-    }
-    return arr
-}
+import { Tuple } from '../types'
+import { dateRange } from '../utils/dateRange'
 
 const IOB = (t: number) => {
     if (t < 0) return 0
@@ -46,7 +33,7 @@ export const useIOBCurveLegacy = (start: DateTime, end: DateTime) => {
             })
             return {
                 datetime: datetime.toJSDate(),
-                IOB: sum(IOBArray)
+                IOB: _.sum(IOBArray)
             }
         })
     }, [bolusInjectionArray])
@@ -91,7 +78,7 @@ export const useIOBCurve = (): [
             })
             return {
                 x: datetime.toJSDate(),
-                y: sum(IOBArray)
+                y: _.sum(IOBArray)
             }
         })
     }, [bolusData])

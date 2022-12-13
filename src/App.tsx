@@ -6,10 +6,10 @@ import { persistStore } from 'redux-persist'
 import { Navbar } from './components/Navbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { LegacyPlot } from './components/LegacyPlot'
-import { ListBolus } from './components/ListBolus'
 import { InsulinCalculator } from './components/InsulinCalculator'
 import { Settings } from './components/Settings'
 import { VictoryIOBPlot } from './components/VictoryIOBPlot'
+import { BolusTable } from './components/BolusTable'
 
 const router = createBrowserRouter([
     {
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/bolus',
-                element: <ListBolus />
+                element: <BolusTable />
             },
             {
                 path: '/calculator',

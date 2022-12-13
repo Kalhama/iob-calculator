@@ -6,7 +6,8 @@ import {
     InputAdornment,
     OutlinedInput,
     Paper,
-    Stack
+    Stack,
+    Typography
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,7 +41,8 @@ export const Settings = () => {
     }
 
     return (
-        <Paper sx={{ margin: '0 auto', maxWidth: '20em', padding: '1em' }}>
+        <Paper sx={{ maxWidth: '20em' }} className="page container">
+            <Typography variant="h1">Settings</Typography>
             <FormControl onSubmit={console.log}>
                 <Stack spacing={2}>
                     <Box>

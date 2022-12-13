@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Paper,
     Stack,
@@ -7,7 +8,8 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    TextField
+    TextField,
+    Typography
 } from '@mui/material'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
@@ -57,42 +59,46 @@ export const InsulinCalculator = () => {
 
     return (
         <>
-            <Paper>
-                <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
-                    <TextField
-                        label="Blood Glucose"
-                        type="number"
-                        value={bloodGlucose === undefined ? '' : bloodGlucose}
-                        onChange={(e) => setBloodGlucose(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                        variant="outlined"
-                        required
-                        autoFocus
-                    />
-                    <TextField
-                        label="Target Blood Glucose"
-                        type="number"
-                        value={targetBloodGlucose}
-                        onChange={(e) => setTargetBloodGlucose(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                        variant="outlined"
-                        required
-                    />
-                    <TextField
-                        label="Meal carbohydrates"
-                        type="number"
-                        value={mealCarbohydrates}
-                        onChange={(e) => setMealCarbohydrates(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                        variant="outlined"
-                    />
-                </Stack>
+            <Paper className="page">
+                <Box className="container">
+                    <Typography variant="h1">Calculator</Typography>
+                    <Stack direction="column" justifyContent="left" alignItems="left" spacing={2}>
+                        <TextField
+                            label="Blood Glucose"
+                            type="number"
+                            value={bloodGlucose === undefined ? '' : bloodGlucose}
+                            onChange={(e) => setBloodGlucose(e.target.value)}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                            variant="outlined"
+                            required
+                            autoFocus
+                        />
+                        <TextField
+                            label="Target Blood Glucose"
+                            type="number"
+                            value={targetBloodGlucose}
+                            onChange={(e) => setTargetBloodGlucose(e.target.value)}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                            variant="outlined"
+                            required
+                        />
+                        <TextField
+                            label="Meal carbohydrates"
+                            type="number"
+                            value={mealCarbohydrates}
+                            onChange={(e) => setMealCarbohydrates(e.target.value)}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                            variant="outlined"
+                        />
+                    </Stack>
+                </Box>
+
                 <Table>
                     <TableHead>
                         <TableRow>

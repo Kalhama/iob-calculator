@@ -10,6 +10,7 @@ import { InsulinCalculator } from './components/InsulinCalculator'
 import { Settings } from './components/Settings'
 import { VictoryIOBPlot } from './components/VictoryIOBPlot'
 import { BolusTable } from './components/BolusTable'
+import { createTheme, ThemeProvider } from '@mui/material'
 
 const router = createBrowserRouter([
     {
@@ -40,6 +41,16 @@ const router = createBrowserRouter([
     }
 ])
 
+const theme = createTheme({
+    typography: {
+        h1: {
+            fontSize: 30,
+            fontWeight: 'bolder',
+            marginBottom: '0.5em'
+        }
+    }
+})
+
 const persistor = persistStore(store)
 
 const rootElement = document.getElementById('root')
@@ -50,7 +61,9 @@ if (rootElement) {
     root.render(
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <RouterProvider router={router} />
+                <ThemeProvider theme={theme}>
+                    <RouterProvider router={router} />
+                </ThemeProvider>
             </PersistGate>
         </Provider>
     )

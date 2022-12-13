@@ -1,5 +1,5 @@
 import { BolusTable } from './BolusTable'
-import { InputBolus } from './InputBolus'
+import { InputBolusFab } from './InputBolusFab'
 import { DatePicker } from './Datepicker'
 import { useState } from 'react'
 import { DateTime } from 'luxon'
@@ -12,7 +12,7 @@ export const ListBolus = () => {
         <>
             <DatePicker date={date} onChange={setDate} />
             <BolusTable date={date} />
-            <InputBolus />
+            <InputBolusFab />
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { InputBolus } from './InputBolus'
+import { InputBolusFab } from './InputBolusFab'
 import { RechartsIOBPlot } from './RechartsIOBPlot'
 import { DatePicker } from './Datepicker'
 import { useState } from 'react'
@@ -12,7 +12,7 @@ export const LegacyPlot = () => {
         <>
             <DatePicker date={date} onChange={setDate} />
             <RechartsIOBPlot date={date} />
-            <InputBolus />
+            <InputBolusFab />
         </>
     )
 }

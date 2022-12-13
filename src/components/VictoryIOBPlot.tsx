@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 import { useMemo, useState } from 'react'
 import { DomainTuple, VictoryChart, VictoryLine, VictoryZoomContainer } from 'victory'
 import { Tuple, useIOBCurve, useIOB } from '../hooks/useIOB'
-import { InputBolus } from './InputBolus'
+import { InputBolusFab } from './InputBolusFab'
 import { JumpToDate } from './JumpToDate'
 
 const maxPoints = 240
@@ -19,7 +19,7 @@ export const VictoryIOBPlot = () => {
                 <Graph data={data} domain={domain} />
             </Box>
             <Box>Current IOB {Math.round(IOB * 10) / 10}</Box>
-            <InputBolus />
+            <InputBolusFab />
         </>
     )
 }

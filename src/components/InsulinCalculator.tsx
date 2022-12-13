@@ -1,12 +1,42 @@
-import { TextField } from '@mui/material'
+import {
+    Button,
+    Paper,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TextField
+} from '@mui/material'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useIOB } from '../hooks/useIOB'
 import { IRootState } from '../store'
-import { addBolus } from '../store/reducers/bolus'
+import SendIcon from '@mui/icons-material/Send'
+import { InputBolusDialog } from './InputBolusDialog'
 
 const numToStr = (num: number): string => (Math.round(num * 10) / 10).toFixed(1)
+interface IProps {
+    totalInsulin: number
+}
+
+const AddBolusSuggestionButton = ({ totalInsulin }: IProps) => {
+    if (totalInsulin < 0.9) return null
+
+    const [open, setOpen] = useState(false)
+    const rounded = Math.round(totalInsulin * 2) / 2
+
+    return (
+        <>
+            <Button endIcon={<SendIcon />} variant="contained" onClick={() => setOpen(true)}>
+                Click to add {rounded} bolus
+            </Button>
+            <InputBolusDialog open={open} setOpen={setOpen} prefilledBolus={rounded} />
+        </>
+    )
+}
 
 export const InsulinCalculator = () => {
     const { carbRate, adjustmentRate, IOBOffset } = useSelector(
@@ -17,9 +47,8 @@ export const InsulinCalculator = () => {
     const [targetBloodGlucose, setTargetBloodGlucose] = useState('7')
     const [mealCarbohydrates, setMealCarbohydrates] = useState('0')
     const IOB = useIOB(DateTime.now())
-    const dispatch = useDispatch()
 
-    const adjustmentInsulin =
+    const adjustmentInsulin: number =
         bloodGlucose !== ''
             ? (Number(bloodGlucose) - Number(targetBloodGlucose)) / adjustmentRate
             : NaN
@@ -28,78 +57,90 @@ export const InsulinCalculator = () => {
 
     return (
         <>
-            <TextField
-                label="Blood Glucose"
-                type="number"
-                value={bloodGlucose === undefined ? '' : bloodGlucose}
-                onChange={(e) => setBloodGlucose(e.target.value)}
-                InputLabelProps={{
-                    shrink: true
-                }}
-                variant="standard"
-            />
-            <TextField
-                label="Target Blood Glucose"
-                type="number"
-                value={targetBloodGlucose}
-                onChange={(e) => setTargetBloodGlucose(e.target.value)}
-                InputLabelProps={{
-                    shrink: true
-                }}
-                variant="standard"
-            />
-            <TextField
-                label="Meal carbohydrates"
-                type="number"
-                value={mealCarbohydrates}
-                onChange={(e) => setMealCarbohydrates(e.target.value)}
-                InputLabelProps={{
-                    shrink: true
-                }}
-                variant="standard"
-            />
-            <table>
-                <tbody>
-                    <tr>
-                        <td>meal insulin</td>
-                        <td>{numToStr(mealInsulin)}</td>
-                        <td>Amount of insulin to compensate carbs from food</td>
-                    </tr>
-                    <tr>
-                        <td>+adjustment insulin</td>
-                        <td>{isNaN(adjustmentInsulin) ? 'N/A' : numToStr(adjustmentInsulin)}</td>
-                        <td>Amount of insulin to get the blood glucose to the desired level</td>
-                    </tr>
-                    <tr>
-                        <td>-Insulin on body</td>
-                        <td>{numToStr(IOB)}</td>
-                        <td>Insulin already active on your body</td>
-                    </tr>
-                    <tr>
-                        <td>+IOB offset</td>
-                        <td>{numToStr(IOBOffset)}</td>
-                        <td>Some residual bolus insulin usually acts as long term insulin</td>
-                    </tr>
-                    <tr>
-                        <td>Total:</td>
-                        <td>{isNaN(totalInsulin) ? 'N/A' : numToStr(totalInsulin)}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <Paper>
+                <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+                    <TextField
+                        label="Blood Glucose"
+                        type="number"
+                        value={bloodGlucose === undefined ? '' : bloodGlucose}
+                        onChange={(e) => setBloodGlucose(e.target.value)}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                        variant="outlined"
+                        required
+                        autoFocus
+                    />
+                    <TextField
+                        label="Target Blood Glucose"
+                        type="number"
+                        value={targetBloodGlucose}
+                        onChange={(e) => setTargetBloodGlucose(e.target.value)}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                        variant="outlined"
+                        required
+                    />
+                    <TextField
+                        label="Meal carbohydrates"
+                        type="number"
+                        value={mealCarbohydrates}
+                        onChange={(e) => setMealCarbohydrates(e.target.value)}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                        variant="outlined"
+                    />
+                </Stack>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Factor</TableCell>
+                            <TableCell>Amount</TableCell>
+                            <TableCell>Info</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>Add: Meal insulin</TableCell>
+                            <TableCell>{numToStr(mealInsulin)}</TableCell>
+                            <TableCell>Amount of insulin to compensate carbs from food</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Add: Adjustment insulin</TableCell>
+                            <TableCell>
+                                {isNaN(adjustmentInsulin) ? 'N/A' : numToStr(adjustmentInsulin)}
+                            </TableCell>
+                            <TableCell>
+                                Amount of insulin to get the blood glucose to the desired level
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Add: IOB offset</TableCell>
+                            <TableCell>{numToStr(IOBOffset)}</TableCell>
+                            <TableCell>
+                                Some residual bolus insulin usually acts as basal insulin
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Reduce: Insulin on body</TableCell>
+                            <TableCell>{numToStr(IOB)}</TableCell>
+                            <TableCell>Insulin already active on your body</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Total:</TableCell>
+                            <TableCell>
+                                {isNaN(totalInsulin) ? 'N/A' : numToStr(totalInsulin)}
+                            </TableCell>
 
-            {totalInsulin > 0.9 ? (
-                <button
-                    onClick={() =>
-                        dispatch(
-                            addBolus({
-                                bolus: Math.round(totalInsulin * 2) / 2,
-                                datetime: DateTime.now().minus({ minute: 1 })
-                            })
-                        )
-                    }>
-                    Add {Math.round(totalInsulin * 2) / 2} bolus now
-                </button>
-            ) : null}
+                            <TableCell>
+                                <AddBolusSuggestionButton totalInsulin={totalInsulin} />
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </Paper>
         </>
     )
 }

@@ -67,7 +67,7 @@ export const Graph = ({ data, domain }: IProps) => {
 
     return (
         <>
-            <JumpToDate onSubmit={handleJumpToDate} />1
+            <JumpToDate onSubmit={handleJumpToDate} />
             <VictoryChart
                 height={400}
                 domain={{ ...domain, y: filteredYDomain }}

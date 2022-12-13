@@ -58,19 +58,18 @@ export const useIOBCurve = (): [
     IOBCurve: Array<{ x: Date; y: number }>,
     domain: { x: Tuple<Date>; y: Tuple<number> }
 ] => {
-    const bolusData = useSelector((state: IRootState) => state.bolusReducer)
+    const bolusData = useSelector((state: IRootState) => state.bolusReducer).map((b) => {
+        return {
+            ...b,
+            datetime: DateTime.fromISO(b.datetime)
+        }
+    })
 
     const XDomain = useMemo(() => {
-        const lastBolus = _.maxBy(bolusData, (d) => DateTime.fromISO(d.datetime)).datetime
-        const last = DateTime.max(
-            DateTime.fromISO(lastBolus).plus({ hours: 6 }),
-            DateTime.now().plus({ hours: 6 })
-        )
-        const firstDatetime = _.minBy(bolusData, (d) => DateTime.fromISO(d.datetime)).datetime
-        return [
-            DateTime.fromISO(firstDatetime).minus({ hours: 3 }).toJSDate(),
-            last.toJSDate()
-        ] as Tuple<Date>
+        const lastBolus = _.maxBy(bolusData, (d) => d.datetime).datetime
+        const last = DateTime.max(lastBolus.plus({ hours: 6 }), DateTime.now().plus({ hours: 6 }))
+        const firstDatetime = _.minBy(bolusData, (d) => d.datetime).datetime
+        return [firstDatetime.minus({ hours: 3 }).toJSDate(), last.toJSDate()] as Tuple<Date>
     }, [bolusData])
 
     const range = useMemo(() => {
@@ -84,9 +83,7 @@ export const useIOBCurve = (): [
         // then sum them together in order to get the consolidated IOB
         return range.map((datetime) => {
             const IOBArray = bolusData.map((bolusInjection) => {
-                const diff = datetime
-                    .diff(DateTime.fromISO(bolusInjection.datetime), 'minutes')
-                    .toObject().minutes
+                const diff = (datetime.valueOf() - bolusInjection.datetime.valueOf()) / 60
                 const scale = bolusInjection.bolus
 
                 return getPercentageEffect(diff) * scale

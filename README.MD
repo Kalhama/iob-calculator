@@ -25,6 +25,5 @@ Hosted on [https://iob.kalhama.fi/](https://iob.kalhama.fi/)
 ![Bolus calculator](sample_images/calculator.png)
 
 ## Known issues ##
-1. Graph loads very slow
-2. Graph zoom doesn't work on mobile
-3. Bundle is too large
+1. Graph zoom doesn't work on mobile
+2. Crashes if you have got no data (for new users)

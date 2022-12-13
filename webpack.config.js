@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = function (env, argv) {
     const isProduction = argv.mode === 'production'
@@ -65,6 +66,10 @@ module.exports = function (env, argv) {
             new HtmlWebpackPlugin({
                 template: 'src/index.html'
             })
-        ]
+        ],
+        optimization: {
+            minimize: isProduction,
+            minimizer: [new TerserPlugin()]
+        }
     }
 }

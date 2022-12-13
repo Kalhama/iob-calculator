@@ -1,4 +1,5 @@
 import { Box } from '@mui/material'
+import _ from 'lodash'
 import { DateTime } from 'luxon'
 import { useMemo, useState } from 'react'
 import { DomainTuple, VictoryChart, VictoryLine, VictoryZoomContainer } from 'victory'
@@ -52,8 +53,16 @@ export const Graph = ({ data, domain }: IProps) => {
             const k = Math.ceil(filtered.length / maxPoints)
             return filtered.filter((d, i) => i % k === 0)
         }
+
         return filtered
     }, [zoomedXDomain, data])
+
+    const filteredYDomain = useMemo<Tuple<number>>(() => {
+        return [
+            _.minBy(filteredData, (d) => d.y).y,
+            Math.max(4, _.maxBy(filteredData, (d) => d.y).y)
+        ]
+    }, [filteredData])
 
     const handleJumpToDate = (date: DateTime) => {
         setZoomedXDomain([date.toJSDate(), date.plus({ hours: 24 }).toJSDate()] as Tuple<Date>)
@@ -61,10 +70,10 @@ export const Graph = ({ data, domain }: IProps) => {
 
     return (
         <>
-            <JumpToDate onSubmit={handleJumpToDate} />
+            <JumpToDate onSubmit={handleJumpToDate} />1
             <VictoryChart
                 height={400}
-                domain={domain}
+                domain={{ ...domain, y: filteredYDomain }}
                 containerComponent={
                     <VictoryZoomContainer
                         zoomDomain={{ x: zoomedXDomain }}
@@ -75,7 +84,9 @@ export const Graph = ({ data, domain }: IProps) => {
                 }>
                 <VictoryLine data={filteredData} />
                 <VictoryLine
-                    style={{ data: { strokeDasharray: '2 2', strokeWidth: 1, stroke: '#c43a31' } }}
+                    style={{
+                        data: { strokeDasharray: '2 2', strokeWidth: 1, stroke: '#c43a31' }
+                    }}
                     data={[
                         { x: new Date(), y: domain.y[0] },
                         { x: new Date(), y: domain.y[1] }

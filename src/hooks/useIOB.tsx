@@ -83,7 +83,8 @@ export const useIOBCurve = (): [
         // then sum them together in order to get the consolidated IOB
         return range.map((datetime) => {
             const IOBArray = bolusData.map((bolusInjection) => {
-                const diff = (datetime.valueOf() - bolusInjection.datetime.valueOf()) / 60
+                const diff =
+                    (datetime.toUnixInteger() - bolusInjection.datetime.toUnixInteger()) / 60
                 const scale = bolusInjection.bolus
 
                 return getPercentageEffect(diff) * scale

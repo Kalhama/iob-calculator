@@ -1,3 +1,4 @@
+import { BloodGlucosePredictionPlot } from './BloodGlucosePredictionPlot'
 import { InputBolusFab } from './InputBolusFab'
 import { IOBPlot } from './IOBPlot'
 
@@ -6,6 +7,7 @@ export const Overview = () => {
         <>
             <IOBPlot />
             <InputBolusFab />
+            <BloodGlucosePredictionPlot />
         </>
     )
 }

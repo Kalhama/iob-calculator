@@ -32,7 +32,7 @@ Hosted on [https://iob.kalhama.fi/](https://iob.kalhama.fi/)
 
 ## Roadmap ##
 2. Input Blood glucose manually for prediction
-    BG(t) = (IOB(t) + BolusAsBasal(t) - IOB(0)) * insulinSensitivity + BG(-15)
+    BG(t) = (IOB(t) + BolusAsBasal(t) - IOB(0)) * insulinSensitivity + BG(0)
 1. Add carbs
     Carbeille samanalaiset käppyrät ku insuliinille
     Päivitetty BG(t) = (IOB(t) + BolusAsBasal(t) - IOB(0)) * insulinSensitivity + BG(0) + (COB(t) - COB(0)) / carbsSensitivity 

@@ -11,7 +11,7 @@ export const Navbar = () => {
     const [value, setValue] = useState(0)
     return (
         <>
-            <div style={{ paddingBottom: '4em' }}>
+            <div style={{ paddingBottom: '18em' }}>
                 <Outlet />
             </div>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>

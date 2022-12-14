@@ -1,104 +1,91 @@
-import { DateTime } from 'luxon'
-import { useSelector } from 'react-redux'
-import { useMemo } from 'react'
-import { selectBolusBetween } from '../store/reducers/bolus'
-import { IRootState } from '../store'
 import _ from 'lodash'
-import { getPercentageEffect } from '../FiaspModel'
-import { Tuple } from '../types'
-import { dateRange } from '../utils/dateRange'
+import { DateTime } from 'luxon'
+import { useMemo } from 'react'
+import { insulinEffect, insulinOnBody } from '../FiaspModel'
+import { IRootState } from '../store'
+import { useNow } from './useNow'
 
-const IOB = (t: number) => {
-    if (t < 0) return 0
-    const divider = -55 * Math.exp(-0 / 55) * (55 + 0)
-    const iob = (-55 * Math.exp(-t / 55) * (55 + t)) / divider
-    return iob
-}
-
-export const useIOBCurveLegacy = (start: DateTime, end: DateTime) => {
-    const bolusInjectionArray = useSelector(selectBolusBetween(start.minus({ hours: 24 }), end))
-
-    const range = dateRange(start, end, { minutes: 1 })
-
-    const consolidatedIOB = useMemo(() => {
-        // for each minute of the day, calculate IOB separately for every bolus injection
-        // then sum them together in order to get the consolidated IOB
-        return range.map((datetime) => {
-            const IOBArray = bolusInjectionArray.map((bolusInjection) => {
-                const diff = datetime
-                    .diff(DateTime.fromISO(bolusInjection.datetime), 'minutes')
-                    .toObject().minutes
-                const scale = bolusInjection.bolus
-                return IOB(diff) * scale
-            })
-            return {
-                datetime: datetime.toJSDate(),
-                IOB: _.sum(IOBArray)
-            }
-        })
-    }, [bolusInjectionArray])
-
-    return [consolidatedIOB]
-}
-
-export const useIOBCurve = (): [
-    IOBCurve: Array<{ x: Date; y: number }>,
-    domain: { x: Tuple<Date>; y: Tuple<number> }
-] => {
-    const bolusData = useSelector((state: IRootState) => state.bolusReducer).map((b) => {
-        return {
-            ...b,
-            datetime: DateTime.fromISO(b.datetime)
-        }
+/**
+ *
+ * @returns bolus in Map format where key is epoch in seconds rounded to closest minute and value is amount of bolus
+ */
+export const selectBolusAsMap = ({ bolusReducer }: IRootState): Map<number, number> => {
+    const arrayFormat = bolusReducer.map((b) => {
+        // TODO should we have dates rounded already in redux?
+        const epoch = Math.round(DateTime.fromISO(b.datetime).toSeconds() / 60) * 60
+        return [epoch, b.bolus] as [number, number]
     })
-
-    const XDomain = useMemo(() => {
-        const lastBolus = _.maxBy(bolusData, (d) => d.datetime).datetime
-        const last = DateTime.max(lastBolus.plus({ hours: 6 }), DateTime.now().plus({ hours: 6 }))
-        const firstDatetime = _.minBy(bolusData, (d) => d.datetime).datetime
-        return [firstDatetime.minus({ hours: 3 }).toJSDate(), last.toJSDate()] as Tuple<Date>
-    }, [bolusData])
-
-    const range = useMemo(() => {
-        return dateRange(DateTime.fromJSDate(XDomain[0]), DateTime.fromJSDate(XDomain[1]), {
-            minutes: 1
-        })
-    }, [XDomain])
-
-    const IOBCurve = useMemo(() => {
-        // for each minute of the day, calculate IOB separately for every bolus injection
-        // then sum them together in order to get the consolidated IOB
-        return range.map((datetime) => {
-            const IOBArray = bolusData.map((bolusInjection) => {
-                const diff =
-                    (datetime.toUnixInteger() - bolusInjection.datetime.toUnixInteger()) / 60
-                const scale = bolusInjection.bolus
-
-                return getPercentageEffect(diff) * scale
-            })
-            return {
-                x: datetime.toJSDate(),
-                y: _.sum(IOBArray)
-            }
-        })
-    }, [bolusData])
-
-    const YDomain = useMemo((): Tuple<number> => {
-        const min = _.minBy(IOBCurve, (d) => d.y).y
-        const max = _.maxBy(IOBCurve, (d) => d.y).y
-        return [min, max]
-    }, [IOBCurve])
-
-    const domain = {
-        x: XDomain,
-        y: YDomain
-    }
-
-    return [IOBCurve, domain]
+    return new Map(arrayFormat)
 }
 
-export const useIOB = (date: DateTime) => {
-    const [IOBCurve] = useIOBCurveLegacy(date.minus({ hours: 1 }), date)
-    if (IOBCurve.length === 0) return 0
-    else return IOBCurve[IOBCurve.length - 1].IOB
+/**
+ *
+ * @param epochToBolusMap Map where key is epoch in seocnds rounded to closest minute and value is amount of bolus
+ * @returns Map where key is epoch in seconds rounded to closest minute and value is amount of bolus wear off during the minute
+ */
+export const useEpochToInsulinEffect = (epochToBolusMap: Map<number, number>) => {
+    return useMemo(() => {
+        const consolidatedInsulinEffect = new Map<number, number>()
+        epochToBolusMap.forEach((bolus, epoch) => {
+            _.range(0, 500).forEach((i) => {
+                // olettaen, että epoch on pyöristetty oikein jo valmiiksi minuuttiin
+                const epochKey = epoch + i * 60
+                consolidatedInsulinEffect.set(
+                    epochKey,
+                    insulinEffect(i, bolus) + (consolidatedInsulinEffect.get(epochKey) || 0)
+                )
+            })
+        })
+
+        return consolidatedInsulinEffect
+    }, [epochToBolusMap])
+}
+
+/**
+ *
+ * @param epochToBolusMap Map where key is epoch in seocnds rounded to closest minute and value is amount of bolus
+ * @returns Map where key is epoch in seocnds rounded to closest minute and value is IOB at that epoch
+ */
+export const useEpochToIOB = (epochToBolusMap: Map<number, number>) => {
+    return useMemo(() => {
+        // non zero parts of the function
+        const insulinOnBoard = new Map<number, number>()
+        epochToBolusMap.forEach((bolus, epoch) => {
+            _.range(0, 500).forEach((i) => {
+                // olettaen, että epoch on pyöristetty oikein jo valmiiksi minuuttiin
+                const epochKey = epoch + i * 60
+                insulinOnBoard.set(
+                    epochKey,
+                    insulinOnBody(i, bolus) + (insulinOnBoard.get(epochKey) || 0)
+                )
+            })
+        })
+
+        // zero parts of the function
+        const domain = [
+            Math.min(...epochToBolusMap.keys()) - 60 * 60 * 3,
+            Math.max(...epochToBolusMap.keys()) + 60 * 60 * 6
+        ]
+        const range = _.range(domain[0], domain[1], 60)
+        range.forEach((epoch) => {
+            insulinOnBoard.set(epoch, insulinOnBoard.get(epoch) || 0)
+        })
+
+        return insulinOnBoard
+    }, [epochToBolusMap])
+}
+
+// TODO move to somewhere else
+
+/**
+ * Insulin on Board (IOB)
+ * @param epochToBolusMap Map where key is epoch in seocnds rounded to closest minute and value is amount of bolus
+ * @returns IOB at current time
+ */
+export const useIOB = (epochToBolusMap: Map<number, number>) => {
+    const now = useNow(60)
+    const nowUnixInteger = Math.round(now.toUnixInteger() / 60) * 60
+    const IOBCurve = useEpochToIOB(epochToBolusMap)
+    const IOBNow = Array.from(IOBCurve).find((el) => el[0] === nowUnixInteger)[1]
+    return IOBNow
 }

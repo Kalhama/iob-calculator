@@ -27,3 +27,4 @@ Hosted on [https://iob.kalhama.fi/](https://iob.kalhama.fi/)
 ## Known issues ##
 1. Graph zoom doesn't work on mobile
 2. Crashes if you have got no data (for new users)
+3. useIOB vois laskee mieluummin minuutin etukätee ku et säädetään aikaa millon insuliini laitetaan siellä ja täällä

@@ -13,43 +13,39 @@ import { selectBolusAsMap } from '../store/reducers/bolus'
 
 const maxPoints = 240
 
-export const IOBPlot = () => {
-    const bolusMap = useSelector(selectBolusAsMap)
-    const data = useIOBCurve(bolusMap)
-    const IOB = useIOBNow(bolusMap)
-    const dataArr = Array.from(data).map(([key, value]) => {
-        return [DateTime.fromSeconds(key).toJSDate(), value] as [Date, number]
-    })
-
-    const domain = {
-        x: [_.minBy(dataArr, (d) => d[0])[0], _.maxBy(dataArr, (d) => d[0])[0]] as Tuple<Date>,
-        y: [_.minBy(dataArr, (d) => d[1])[1], _.maxBy(dataArr, (d) => d[1])[1]] as Tuple<number>
-    }
-
-    return (
-        <>
-            <Box sx={{ height: '400px' }}>
-                <Graph data={dataArr} domain={domain} />
-            </Box>
-            <Box>Current IOB {Math.round(IOB * 10) / 10}</Box>
-        </>
-    )
-}
-
-interface IProps {
+interface IData {
     data: [Date, number][]
     domain: {
         x: Tuple<Date>
         y: Tuple<number>
     }
+    IOB: number
 }
 
-export const Graph = ({ data, domain }: IProps) => {
+const useDataForIOBPlot = (): IData => {
+    const bolusMap = useSelector(selectBolusAsMap)
+    const dataMap = useIOBCurve(bolusMap)
+    const data = Array.from(dataMap).map(([key, value]) => {
+        return [DateTime.fromSeconds(key).toJSDate(), value] as [Date, number]
+    }) as [Date, number][]
+
+    const domain = {
+        x: [_.minBy(data, (d) => d[0])[0], _.maxBy(data, (d) => d[0])[0]] as Tuple<Date>,
+        y: [_.minBy(data, (d) => d[1])[1], _.maxBy(data, (d) => d[1])[1]] as Tuple<number>
+    } as { x: Tuple<Date>; y: Tuple<number> }
+
+    const IOB = useIOBNow(bolusMap)
+
+    return { data, domain, IOB }
+}
+
+export const IOBPlot = () => {
+    const { data, domain, IOB } = useDataForIOBPlot()
+
     const initialXDomain = [
         DateTime.now().minus({ hours: 3 }).toJSDate(),
         DateTime.now().plus({ hours: 3 }).toJSDate()
     ] as Tuple<Date>
-
     const [zoomedXDomain, setZoomedXDomain] = useState(initialXDomain)
     const now = useNow(60)
 
@@ -78,29 +74,32 @@ export const Graph = ({ data, domain }: IProps) => {
 
     return (
         <>
-            <JumpToDate onSubmit={handleJumpToDate} />
-            <VictoryChart
-                height={400}
-                domain={{ ...domain, y: filteredYDomain }}
-                containerComponent={
-                    <VictoryZoomContainer
-                        zoomDomain={{ x: zoomedXDomain }}
-                        zoomDimension="x"
-                        onZoomDomainChange={onZoomDomainChange}
-                        minimumZoom={{ x: 15 * (1000 * 60) }}
+            <Box sx={{ height: '400px' }}>
+                <JumpToDate onSubmit={handleJumpToDate} />
+                <VictoryChart
+                    height={400}
+                    domain={{ ...domain, y: filteredYDomain }}
+                    containerComponent={
+                        <VictoryZoomContainer
+                            zoomDomain={{ x: zoomedXDomain }}
+                            zoomDimension="x"
+                            onZoomDomainChange={onZoomDomainChange}
+                            minimumZoom={{ x: 15 * (1000 * 60) }}
+                        />
+                    }>
+                    <VictoryLine x={0} y={1} data={filteredData} />
+                    <VictoryLine
+                        style={{
+                            data: { strokeDasharray: '2 2', strokeWidth: 1, stroke: '#c43a31' }
+                        }}
+                        data={[
+                            { x: now.toJSDate(), y: 0 },
+                            { x: now.toJSDate(), y: 5 }
+                        ]}
                     />
-                }>
-                <VictoryLine x={0} y={1} data={filteredData} />
-                <VictoryLine
-                    style={{
-                        data: { strokeDasharray: '2 2', strokeWidth: 1, stroke: '#c43a31' }
-                    }}
-                    data={[
-                        { x: now.toJSDate(), y: 0 },
-                        { x: now.toJSDate(), y: 5 }
-                    ]}
-                />
-            </VictoryChart>
+                </VictoryChart>
+            </Box>
+            <Box sx={{ marginTop: '2em' }}>Current IOB {Math.round(IOB * 10) / 10}</Box>
         </>
     )
 }

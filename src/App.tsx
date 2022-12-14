@@ -5,7 +5,6 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 import { Navbar } from './components/Navbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { LegacyPlot } from './components/LegacyPlot'
 import { InsulinCalculator } from './components/InsulinCalculator'
 import { Settings } from './components/Settings'
 import { VictoryIOBPlot } from './components/VictoryIOBPlot'
@@ -17,10 +16,6 @@ const router = createBrowserRouter([
         path: '/',
         element: <Navbar />,
         children: [
-            {
-                path: '/legacy',
-                element: <LegacyPlot />
-            },
             {
                 path: '/',
                 element: <VictoryIOBPlot />

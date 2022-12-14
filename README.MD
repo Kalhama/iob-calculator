@@ -28,3 +28,13 @@ Hosted on [https://iob.kalhama.fi/](https://iob.kalhama.fi/)
 1. Graph zoom doesn't work on mobile
 2. Crashes if you have got no data (for new users)
 3. useIOB vois laskee mieluummin minuutin etukätee ku et säädetään aikaa millon insuliini laitetaan siellä ja täällä
+4. there is slight jitter in graph when zooming in and out.
+
+## Roadmap ##
+2. Input Blood glucose manually for prediction
+    BG(t) = (IOB(t) + BolusAsBasal(t) - IOB(0)) * insulinSensitivity + BG(-15)
+1. Add carbs
+    Carbeille samanalaiset käppyrät ku insuliinille
+    Päivitetty BG(t) = (IOB(t) + BolusAsBasal(t) - IOB(0)) * insulinSensitivity + BG(0) + (COB(t) - COB(0)) / carbsSensitivity 
+3. Network sync
+    4. Integrate BG from libre

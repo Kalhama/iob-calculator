@@ -7,9 +7,9 @@ import { Navbar } from './components/Navbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { InsulinCalculator } from './components/InsulinCalculator'
 import { Settings } from './components/Settings'
-import { VictoryIOBPlot } from './components/VictoryIOBPlot'
 import { BolusTable } from './components/BolusTable'
 import { createTheme, ThemeProvider } from '@mui/material'
+import { Overview } from './components/Overview'
 
 const router = createBrowserRouter([
     {
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <VictoryIOBPlot />
+                element: <Overview />
             },
             {
                 path: '/bolus',

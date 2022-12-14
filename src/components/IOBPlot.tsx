@@ -3,19 +3,20 @@ import _ from 'lodash'
 import { DateTime } from 'luxon'
 import { useMemo, useState } from 'react'
 import { DomainTuple, VictoryChart, VictoryLine, VictoryZoomContainer } from 'victory'
-import { selectBolusAsMap, useEpochToIOB, useIOB } from '../hooks/useIOB'
+import { useIOBNow } from '../hooks/useIOBNow'
+import { useIOBCurve } from '../hooks/useIOBCurve'
 import { useNow } from '../hooks/useNow'
-import { InputBolusFab } from './InputBolusFab'
 import { JumpToDate } from './JumpToDate'
 import { Tuple } from '../types'
 import { useSelector } from 'react-redux'
+import { selectBolusAsMap } from '../store/reducers/bolus'
 
 const maxPoints = 240
 
-export const VictoryIOBPlot = () => {
+export const IOBPlot = () => {
     const bolusMap = useSelector(selectBolusAsMap)
-    const data = useEpochToIOB(bolusMap)
-    const IOB = useIOB(bolusMap)
+    const data = useIOBCurve(bolusMap)
+    const IOB = useIOBNow(bolusMap)
     const dataArr = Array.from(data).map(([key, value]) => {
         return [DateTime.fromSeconds(key).toJSDate(), value] as [Date, number]
     })
@@ -31,7 +32,6 @@ export const VictoryIOBPlot = () => {
                 <Graph data={dataArr} domain={domain} />
             </Box>
             <Box>Current IOB {Math.round(IOB * 10) / 10}</Box>
-            <InputBolusFab />
         </>
     )
 }

@@ -13,10 +13,11 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectBolusAsMap, useIOB } from '../hooks/useIOB'
+import { useIOBNow } from '../hooks/useIOBNow'
 import { IRootState } from '../store'
 import SendIcon from '@mui/icons-material/Send'
 import { InputBolusDialog } from './InputBolusDialog'
+import { selectBolusAsMap } from '../store/reducers/bolus'
 
 const numToStr = (num: number): string => (Math.round(num * 10) / 10).toFixed(1)
 interface IProps {
@@ -51,7 +52,7 @@ export const InsulinCalculator = () => {
     const [targetBloodGlucose, setTargetBloodGlucose] = useState(targetBloodGlucoseDefault || '7')
     const [mealCarbohydrates, setMealCarbohydrates] = useState('0')
     const bolusMap = useSelector(selectBolusAsMap)
-    const IOB = useIOB(bolusMap)
+    const IOB = useIOBNow(bolusMap)
 
     const adjustmentInsulin: number =
         bloodGlucose !== ''

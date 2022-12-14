@@ -69,6 +69,21 @@ export const Settings = () => {
                         />
                         <FormHelperText>Units per mmol/l</FormHelperText>
                     </Box>
+                    <Box>
+                        <OutlinedInput
+                            sx={{ width: '100%' }}
+                            value={
+                                settings.targetBloodGlucose === undefined
+                                    ? '7'
+                                    : settings.targetBloodGlucose
+                            }
+                            onChange={handleChange('targetBloodGlucose')}
+                            required
+                            type="number"
+                            endAdornment={<InputAdornment position="end">mmol/l</InputAdornment>}
+                        />
+                        <FormHelperText>Target blood glucose in mmol/l</FormHelperText>
+                    </Box>
 
                     <OutlinedInput
                         sx={{ width: '100%' }}

@@ -11,10 +11,9 @@ import {
     TextField,
     Typography
 } from '@mui/material'
-import { DateTime } from 'luxon'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useIOB } from '../hooks/useIOB'
+import { selectBolusAsMap, useIOB } from '../hooks/useIOB'
 import { IRootState } from '../store'
 import SendIcon from '@mui/icons-material/Send'
 import { InputBolusDialog } from './InputBolusDialog'
@@ -41,14 +40,18 @@ const AddBolusSuggestionButton = ({ totalInsulin }: IProps) => {
 }
 
 export const InsulinCalculator = () => {
-    const { carbRate, adjustmentRate, IOBOffset } = useSelector(
-        (state: IRootState) => state.settings
-    )
+    const {
+        carbRate,
+        adjustmentRate,
+        IOBOffset,
+        targetBloodGlucose: targetBloodGlucoseDefault
+    } = useSelector((state: IRootState) => state.settings)
 
     const [bloodGlucose, setBloodGlucose] = useState('7')
-    const [targetBloodGlucose, setTargetBloodGlucose] = useState('7')
+    const [targetBloodGlucose, setTargetBloodGlucose] = useState(targetBloodGlucoseDefault || '7')
     const [mealCarbohydrates, setMealCarbohydrates] = useState('0')
-    const IOB = useIOB(DateTime.now())
+    const bolusMap = useSelector(selectBolusAsMap)
+    const IOB = useIOB(bolusMap)
 
     const adjustmentInsulin: number =
         bloodGlucose !== ''

@@ -1,5 +1,4 @@
 import { Box, TextField } from '@mui/material'
-import _ from 'lodash'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
 import { VictoryChart, VictoryLine } from 'victory'
@@ -16,10 +15,18 @@ export const BloodGlucosePredictionPlot = () => {
         return [DateTime.fromSeconds(key).toJSDate(), value] as [Date, number]
     })
 
-    const domain = {
-        x: [_.minBy(dataArr, (d) => d[0])[0], _.maxBy(dataArr, (d) => d[0])[0]] as Tuple<Date>,
-        y: [_.minBy(dataArr, (d) => d[1])[1], _.maxBy(dataArr, (d) => d[1])[1]] as Tuple<number>
-    }
+    const domain = (() => {
+        const now = DateTime.now()
+        const minDate = now.toJSDate()
+        const maxDate = now.plus({ hours: 3 }).toJSDate()
+        const values = dataArr.map((d) => d[1])
+        const maxValue = Math.max(...values)
+
+        return {
+            x: [minDate, maxDate] as Tuple<Date>,
+            y: [0, maxValue + 1 || 10] as Tuple<number>
+        }
+    })()
 
     return (
         <>

@@ -65,7 +65,7 @@ export const IOBPlot = () => {
     }, [zoomedXDomain, data])
 
     const filteredYDomain = useMemo<Tuple<number>>(() => {
-        return [0, Math.max(4, _.maxBy(filteredData, (d) => d[1])[1] + 1)]
+        return [0, Math.max(4, ...filteredData.map((d) => d[1] + 1))]
     }, [filteredData])
 
     const handleJumpToDate = (date: DateTime) => {

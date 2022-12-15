@@ -24,8 +24,8 @@ export const useIOBCurve = (epochToBolusMap: Map<number, number>) => {
 
         // zero parts of the function
         const domain = [
-            Math.min(...epochToBolusMap.keys()) - 60 * 60 * 3,
-            Math.max(...epochToBolusMap.keys()) + 60 * 60 * 6
+            Math.min(...epochToBolusMap.keys(), new Date().valueOf() / 1000) - 60 * 60 * 3,
+            Math.max(...epochToBolusMap.keys(), new Date().valueOf() / 1000) + 60 * 60 * 6
         ]
         const range = _.range(domain[0], domain[1], 60)
         range.forEach((epoch) => {

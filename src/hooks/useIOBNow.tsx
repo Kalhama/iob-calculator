@@ -10,6 +10,6 @@ export const useIOBNow = (epochToBolusMap: Map<number, number>) => {
     const now = useNow(60)
     const nowUnixInteger = Math.round(now.toUnixInteger() / 60) * 60
     const IOBCurve = useIOBCurve(epochToBolusMap)
-    const IOBNow = Array.from(IOBCurve).find((el) => el[0] === nowUnixInteger)[1]
+    const IOBNow = IOBCurve.get(nowUnixInteger) || 0
     return IOBNow
 }

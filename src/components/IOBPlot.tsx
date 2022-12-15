@@ -1,5 +1,4 @@
 import { Box } from '@mui/material'
-import _ from 'lodash'
 import { DateTime } from 'luxon'
 import { useMemo, useState } from 'react'
 import { DomainTuple, VictoryChart, VictoryLine, VictoryZoomContainer } from 'victory'
@@ -29,10 +28,18 @@ const useDataForIOBPlot = (): IData => {
         return [DateTime.fromSeconds(key).toJSDate(), value] as [Date, number]
     }) as [Date, number][]
 
-    const domain = {
-        x: [_.minBy(data, (d) => d[0])[0], _.maxBy(data, (d) => d[0])[0]] as Tuple<Date>,
-        y: [_.minBy(data, (d) => d[1])[1], _.maxBy(data, (d) => d[1])[1]] as Tuple<number>
-    } as { x: Tuple<Date>; y: Tuple<number> }
+    const domain = (() => {
+        const epochArr = data.map((d) => d[0].valueOf())
+        const minDate = new Date(Math.min(...epochArr))
+        const maxDate = new Date(Math.max(...epochArr))
+        const valueArr = data.map((d) => d[1])
+        const minValue = Math.min(...valueArr)
+        const maxValue = Math.max(...valueArr)
+        return {
+            x: [minDate, maxDate],
+            y: [minValue, maxValue]
+        } as { x: Tuple<Date>; y: Tuple<number> }
+    })()
 
     const IOB = useIOBNow(bolusMap)
 

@@ -12,9 +12,10 @@ module.exports = function (env, argv) {
         mode: isDevelopment ? 'development' : 'production',
         entry: './src/index.ts',
         output: {
-            filename: 'main.js',
+            filename: 'main-[contenthash].js',
             path: path.resolve(__dirname, 'dist'),
-            publicPath: '/'
+            publicPath: '/',
+            clean: true
         },
         devServer: {
             static: './dist',

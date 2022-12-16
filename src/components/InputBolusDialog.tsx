@@ -63,7 +63,7 @@ export const InputBolusDialog = ({ prefilledBolus, open, setOpen }: IProps) => {
                         </LocalizationProvider>
                         <TextField
                             id="standard-number"
-                            label="Number"
+                            label="Bolus"
                             type="number"
                             value={bolus}
                             onChange={(e) => setBolus(e.target.value)}

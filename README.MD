@@ -31,8 +31,8 @@ Hosted on [https://iob.kalhama.fi/](https://iob.kalhama.fi/)
 6. Cant scroll main page sometimes
 7. Hot reloading doesn't work when developing
 8. there was bug in COB-plot at least once where plot jumped between 0 and actual balue
-
-
+9. y axis is sometimes too large in zoomablegraph
+10. BG prediction doesn't work if there are no carb entries in the app
 
 ## Roadmap ##
 1. BGPrediction refactoring

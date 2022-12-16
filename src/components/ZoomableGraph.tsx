@@ -40,7 +40,7 @@ export const ZoomableGraph = ({ data, dataDomain, date }: IProps) => {
             filteredData = filteredData.filter((d, i) => i % k === 0)
         }
 
-        const yDomain = [0, Math.max(4, ...filteredData.map((d) => d[1] + 1))] as Tuple<number>
+        const yDomain = [0, Math.max(10, ...filteredData.map((d) => d[1] + 1))] as Tuple<number>
 
         return { filteredData, yDomain }
     }, [xDomain, data])

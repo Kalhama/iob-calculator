@@ -7,9 +7,9 @@ import { Navbar } from './components/Navbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { InsulinCalculator } from './components/InsulinCalculator'
 import { Settings } from './components/Settings'
-import { BolusTable } from './components/BolusTable'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { Overview } from './components/Overview'
+import { ListView } from './components/ListView'
 
 const router = createBrowserRouter([
     {
@@ -21,8 +21,8 @@ const router = createBrowserRouter([
                 element: <Overview />
             },
             {
-                path: '/bolus',
-                element: <BolusTable />
+                path: '/list',
+                element: <ListView />
             },
             {
                 path: '/calculator',

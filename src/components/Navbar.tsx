@@ -22,7 +22,7 @@ export const Navbar = () => {
                     }}>
                     <BottomNavigationAction to={'/'} component={NavLink} icon={<TimelineIcon />} />
                     <BottomNavigationAction
-                        to={'/bolus'}
+                        to={'/list'}
                         component={NavLink}
                         icon={<FormatListBulletedIcon />}
                     />

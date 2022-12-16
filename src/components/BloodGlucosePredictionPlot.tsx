@@ -6,11 +6,13 @@ import { Tuple } from '../types'
 import { useSelector } from 'react-redux'
 import { useBloodGlucosePrediction } from '../hooks/useBloodGlucosePrediction'
 import { selectBolusAsMap } from '../store/reducers/bolus'
+import { selectCarbsAsMap } from '../store/reducers/carbs'
 
 export const BloodGlucosePredictionPlot = () => {
     const [bloodGlucose, setBloodGlucose] = useState('7')
     const bolusMap = useSelector(selectBolusAsMap)
-    const data = useBloodGlucosePrediction(Number(bloodGlucose || '7'), bolusMap)
+    const carbsMap = useSelector(selectCarbsAsMap)
+    const data = useBloodGlucosePrediction(Number(bloodGlucose || '7'), bolusMap, carbsMap)
     const dataArr = Array.from(data).map(([key, value]) => {
         return [DateTime.fromSeconds(key).toJSDate(), value] as [Date, number]
     })
@@ -41,7 +43,6 @@ export const BloodGlucosePredictionPlot = () => {
                         shrink: true
                     }}
                     variant="standard"
-                    autoFocus
                 />
                 <Graph data={dataArr} domain={domain} />
             </Box>

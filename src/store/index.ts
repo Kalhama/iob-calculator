@@ -4,6 +4,7 @@ import logger from 'redux-logger'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import { settingsReducer } from './reducers/settings'
+import { carbsReducer } from './reducers/carbs'
 const persistConfig = {
     key: 'root',
     storage
@@ -11,7 +12,8 @@ const persistConfig = {
 
 const reducers = combineReducers({
     bolusReducer,
-    settings: settingsReducer
+    settings: settingsReducer,
+    carbs: carbsReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers)

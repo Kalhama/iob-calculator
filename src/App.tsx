@@ -1,3 +1,4 @@
+import './style/style.sass'
 import * as ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import store from './store'

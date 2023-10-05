@@ -1,13 +1,20 @@
 {
     "compilerOptions": {
-        "outDir": "./dist/",
-        "noImplicitAny": true,
-        "module": "es6",
-        "target": "ES2021",
-        "jsx": "react-jsx",
-        "allowJs": true,
-        "lib": ["DOM"],
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true
-    }
-}
+      "baseUrl": "./",
+      "jsx": "react",
+      "module": "commonjs",
+      "noImplicitAny": true,
+      "outDir": "./dist/",
+      "preserveConstEnums": true,
+      "removeComments": true,
+      "sourceMap": true,
+      "target": "es5",
+      "esModuleInterop": true,
+      "strictNullChecks": true,
+      "lib": ["DOM","ESNext"]
+    },
+    "include": [
+      "./**/**/*"
+    ]
+
+  }

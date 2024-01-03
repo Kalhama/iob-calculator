@@ -14,6 +14,10 @@ export const BolusList = ({ start, end }: IProps) => {
     const dispatch = useDispatch()
 
     const bolusArray = useSelector(selectBolusBetween(start, end))
+    const total = bolusArray.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.bolus,
+        0
+    )
 
     return (
         <>
@@ -41,6 +45,7 @@ export const BolusList = ({ start, end }: IProps) => {
                     </Paper>
                 )
             })}
+            <span>Total: {total} U</span>
             <InputBolusFab />
         </>
     )

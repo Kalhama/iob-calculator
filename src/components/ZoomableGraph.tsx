@@ -19,7 +19,7 @@ interface IProps {
 export const ZoomableGraph = ({ data, dataDomain, date }: IProps) => {
     const now = useNow(60)
 
-    const initialXDomain = [date.toJSDate(), date.plus({ hours: 6 }).toJSDate()] as Tuple<Date>
+    const initialXDomain = [date.toJSDate(), date.plus({ hours: 1 }).toJSDate()] as Tuple<Date>
     const [xDomain, setXDomain] = useState(initialXDomain)
 
     // update zoom if date changes

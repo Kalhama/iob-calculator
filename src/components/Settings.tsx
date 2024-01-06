@@ -16,6 +16,7 @@ import { IRootState } from '../store'
 import { setSettings } from '../store/reducers/settings'
 import LoadingButton from '@mui/lab/LoadingButton'
 import SaveIcon from '@mui/icons-material/Save'
+import React from 'react'
 
 export const Settings = () => {
     const userSettings = useSelector((state: IRootState) => state.settings)

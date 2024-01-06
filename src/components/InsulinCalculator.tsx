@@ -18,6 +18,7 @@ import { IRootState } from '../store'
 import SendIcon from '@mui/icons-material/Send'
 import { InputBolusDialog } from './InputBolusDialog'
 import { selectBolusAsMap } from '../store/reducers/bolus'
+import React from 'react'
 
 const numToStr = (num: number): string => (Math.round(num * 10) / 10).toFixed(1)
 interface IProps {

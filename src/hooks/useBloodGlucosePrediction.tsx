@@ -39,9 +39,10 @@ export const useBloodGlucosePrediction = (
 
     // create prediction for every range element
     predictionRange.forEach((epoch) => {
-        const insulinEffect = (IOB.get(epoch) - IOB.get(start)) * insulinSensitivity
+        const insulinEffect = ((IOB.get(epoch) || 0) - (IOB.get(start) || 0)) * insulinSensitivity
         // TODO are we absolutely sure that COB has got the same data keys than IOB? if not this fails
-        const carbEffect = ((COB.get(start) - COB.get(epoch)) / carbRate) * insulinSensitivity
+        const carbEffect =
+            ((COB.get(start) || 0) - (COB.get(epoch) || 0) / carbRate) * insulinSensitivity
         const prediction = insulinEffect + carbEffect + bloodGlucose
 
         predictionMap.set(epoch, prediction)

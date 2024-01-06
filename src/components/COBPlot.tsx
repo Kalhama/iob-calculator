@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { ZoomableGraph } from './ZoomableGraph'
 import { selectCarbsAsMap } from '../store/reducers/carbs'
 import { useCOBCurve } from '../hooks/useCOBCurve'
+import React from 'react'
 
 interface IData {
     data: [Date, number][]

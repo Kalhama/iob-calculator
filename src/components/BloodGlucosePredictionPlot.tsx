@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { useBloodGlucosePrediction } from '../hooks/useBloodGlucosePrediction'
 import { selectBolusAsMap } from '../store/reducers/bolus'
 import { selectCarbsAsMap } from '../store/reducers/carbs'
+import React from 'react'
 
 export const BloodGlucosePredictionPlot = () => {
     const [bloodGlucose, setBloodGlucose] = useState('7')

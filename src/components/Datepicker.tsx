@@ -7,6 +7,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { IconButton } from '@mui/material'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
+import React from 'react'
 
 export const DatePicker = ({
     date,
@@ -16,7 +17,9 @@ export const DatePicker = ({
     onChange?: (date: DateTime) => unknown
 }) => {
     const changeDate = (d: number) => {
-        onChange(date.plus({ days: d }))
+        if (onChange) {
+            onChange(date.plus({ days: d }))
+        }
     }
 
     return (
@@ -34,7 +37,11 @@ export const DatePicker = ({
                         label="Change date"
                         inputFormat="dd.MM.yyyy"
                         value={date}
-                        onChange={(e) => onChange(e)}
+                        onChange={(e) => {
+                            if (onChange && e) {
+                                onChange(e)
+                            }
+                        }}
                         // onChange={handleChange}
                         renderInput={(params) => (
                             <TextField variant="standard" sx={{ width: '10em' }} {...params} />

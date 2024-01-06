@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import CalculateIcon from '@mui/icons-material/Calculate'
 import SettingsIcon from '@mui/icons-material/Settings'
+import React from 'react'
 
 export const Navbar = () => {
     const [value, setValue] = useState(0)

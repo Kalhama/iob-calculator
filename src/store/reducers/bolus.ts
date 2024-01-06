@@ -1,6 +1,7 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 import { DateTime } from 'luxon'
 import { IRootState } from '../index'
+import { roundEpochToMinute } from '../../utils/roundEpochToMinute'
 
 interface PostBolusInterface {
     datetime: DateTime
@@ -29,7 +30,7 @@ export const selectBolusAsMap = ({ bolusReducer }: IRootState): Map<number, numb
     const arrayFormat = bolusReducer.map((b) => {
         // TODO should we have dates rounded already in redux?
         // TODO warning if there is two inputs on same minute this causes errors
-        const epoch = Math.round(DateTime.fromISO(b.datetime).toSeconds() / 60) * 60
+        const epoch = roundEpochToMinute(DateTime.fromISO(b.datetime).toSeconds())
         return [epoch, b.bolus] as [number, number]
     })
     return new Map(arrayFormat)
@@ -49,7 +50,7 @@ export const bolusReducer = createReducer(initialState, (builder) => {
 
             state.push({
                 id: Math.max(...state.map((bolus) => bolus.id + 1), 0),
-                datetime: datetime.toISO(),
+                datetime: datetime.toISO() ?? '2000-01-01T00:00:00.000-00:00',
                 bolus
             })
         })

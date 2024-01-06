@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import { LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers'
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
+import React from 'react'
 
 interface IProps {
     onSubmit?: (data: DateTime) => unknown
@@ -57,7 +58,9 @@ export const JumpToDate = ({ onSubmit }: IProps) => {
                                     displayStaticWrapperAs="desktop"
                                     orientation="landscape"
                                     shouldDisableDate={(day: DateTime) => {
-                                        return DateTime.now().diff(day, 'days').toObject().days < 0
+                                        return (
+                                            (DateTime.now().diff(day, 'days').as('days') ?? 999) < 0
+                                        )
                                     }}
                                     openTo="day"
                                     value={datetime}

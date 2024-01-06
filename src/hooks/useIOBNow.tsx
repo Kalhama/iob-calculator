@@ -1,3 +1,4 @@
+import { roundEpochToMinute } from '../utils/roundEpochToMinute'
 import { useIOBCurve } from './useIOBCurve'
 import { useNow } from './useNow'
 
@@ -8,7 +9,7 @@ import { useNow } from './useNow'
  */
 export const useIOBNow = (epochToBolusMap: Map<number, number>) => {
     const now = useNow(60)
-    const nowUnixInteger = Math.round(now.toUnixInteger() / 60) * 60
+    const nowUnixInteger = roundEpochToMinute(now.toUnixInteger())
     const IOBCurve = useIOBCurve(epochToBolusMap)
     const IOBNow = IOBCurve.get(nowUnixInteger) || 0
     return IOBNow

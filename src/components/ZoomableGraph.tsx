@@ -33,17 +33,12 @@ export const ZoomableGraph = ({ data, dataDomain, date }: IProps) => {
         setXDomain([newDomainStart.toJSDate(), newDomainEnd.toJSDate()])
     }, [date])
 
-    const { filteredData, yDomain } = useMemo(() => {
-        let filteredData = data.filter((d) => d[0] >= xDomain[0] && d[0] <= xDomain[1])
-
-        if (filteredData.length > maxPoints) {
-            const k = Math.ceil(filteredData.length / maxPoints)
-            filteredData = filteredData.filter((d, i) => i % k === 0)
-        }
+    const yDomain = useMemo(() => {
+        const filteredData = data.filter((d) => d[0] >= xDomain[0] && d[0] <= xDomain[1])
 
         const yDomain = [0, Math.max(10, ...filteredData.map((d) => d[1] + 1))] as Tuple<number>
 
-        return { filteredData, yDomain }
+        return yDomain
     }, [xDomain, data])
 
     return (
@@ -60,7 +55,7 @@ export const ZoomableGraph = ({ data, dataDomain, date }: IProps) => {
                             minimumZoom={{ x: 15 * (1000 * 60) }}
                         />
                     }>
-                    <VictoryLine x={0} y={1} data={filteredData} />
+                    <VictoryLine x={0} y={1} data={data} />
                     <VictoryLine
                         style={{
                             data: { strokeDasharray: '2 2', strokeWidth: 1, stroke: '#c43a31' }

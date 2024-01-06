@@ -41,7 +41,7 @@ const useDataForCOBPlot = (): IData => {
 
 export const COBPlot = () => {
     const { data, dataDomain } = useDataForCOBPlot()
-    const [date, setDate] = useState(DateTime.now().minus({ hours: 3 }))
+    const [date, setDate] = useState(DateTime.now().minus({ hours: 1 }))
     return (
         <>
             <JumpToDate onSubmit={setDate} />

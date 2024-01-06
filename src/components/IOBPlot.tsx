@@ -8,6 +8,7 @@ import { Tuple } from '../types'
 import { useSelector } from 'react-redux'
 import { selectBolusAsMap } from '../store/reducers/bolus'
 import { ZoomableGraph } from './ZoomableGraph'
+import React from 'react'
 
 interface IData {
     data: [Date, number][]
@@ -21,6 +22,7 @@ interface IData {
 const useDataForIOBPlot = (): IData => {
     const bolusMap = useSelector(selectBolusAsMap)
     const dataMap = useIOBCurve(bolusMap)
+
     const data = Array.from(dataMap).map(([key, value]) => {
         return [DateTime.fromSeconds(key).toJSDate(), value] as [Date, number]
     })

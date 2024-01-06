@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 import { useEffect, useMemo, useState } from 'react'
 import { VictoryChart, VictoryLine, VictoryZoomContainer } from 'victory'
 import { useNow } from '../hooks/useNow'
+import React from 'react'
 import { Tuple } from '../types'
 
 const maxPoints = 240

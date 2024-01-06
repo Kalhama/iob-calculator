@@ -11,6 +11,7 @@ import { Settings } from './components/Settings'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { Overview } from './components/Overview'
 import { ListView } from './components/ListView'
+import React from 'react'
 
 const router = createBrowserRouter([
     {

@@ -47,7 +47,7 @@ const useDataForIOBPlot = (): IData => {
 
 export const IOBPlot = () => {
     const { data, dataDomain, IOB } = useDataForIOBPlot()
-    const [date, setDate] = useState(DateTime.now().minus({ hours: 3 }))
+    const [date, setDate] = useState(DateTime.now().minus({ hours: 1 }))
     return (
         <>
             <JumpToDate onSubmit={setDate} />

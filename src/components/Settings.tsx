@@ -65,10 +65,10 @@ export const Settings = () => {
                             required
                             type="number"
                             endAdornment={
-                                <InputAdornment position="end">U / mmol/l</InputAdornment>
+                                <InputAdornment position="end">mmol/l / U</InputAdornment>
                             }
                         />
-                        <FormHelperText>Units per mmol/l</FormHelperText>
+                        <FormHelperText>Adjustment rate for high blood glucose</FormHelperText>
                     </Box>
                     <Box>
                         <OutlinedInput
@@ -83,7 +83,7 @@ export const Settings = () => {
                             type="number"
                             endAdornment={<InputAdornment position="end">mmol/l</InputAdornment>}
                         />
-                        <FormHelperText>Target blood glucose in mmol/l</FormHelperText>
+                        <FormHelperText>Target blood glucose</FormHelperText>
                     </Box>
 
                     <OutlinedInput

@@ -10,9 +10,7 @@ export const useBloodGlucosePrediction = (
     bolusMap: Map<number, number>,
     carbsMap: CarbsMap
 ): Map<number, number> => {
-    const { adjustmentRate: insulinSensitivity, carbRate } = useSelector(
-        (state: IRootState) => state.settings
-    )
+    const { adjustmentRate, carbRate } = useSelector((state: IRootState) => state.settings)
 
     const nowEpoch = DateTime.now().toUnixInteger()
 
@@ -39,10 +37,11 @@ export const useBloodGlucosePrediction = (
 
     // create prediction for every range element
     predictionRange.forEach((epoch) => {
-        const insulinEffect = ((IOB.get(epoch) || 0) - (IOB.get(start) || 0)) * insulinSensitivity
+        const insulinEffect = ((IOB.get(epoch) || 0) - (IOB.get(start) || 0)) * adjustmentRate
         // TODO are we absolutely sure that COB has got the same data keys than IOB? if not this fails
         const carbEffect =
-            ((COB.get(start) || 0) - (COB.get(epoch) || 0) / carbRate) * insulinSensitivity
+            (((COB.get(start) || 0) - (COB.get(epoch) || 0)) / carbRate) * adjustmentRate
+
         const prediction = insulinEffect + carbEffect + bloodGlucose
 
         predictionMap.set(epoch, prediction)

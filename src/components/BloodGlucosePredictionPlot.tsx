@@ -24,10 +24,11 @@ export const BloodGlucosePredictionPlot = () => {
         const maxDate = now.plus({ hours: 3 }).toJSDate()
         const values = dataArr.map((d) => d[1])
         const maxValue = Math.max(...values)
+        const minValue = Math.min(...values, 0)
 
         return {
             x: [minDate, maxDate] as Tuple<Date>,
-            y: [0, maxValue + 1 || 10] as Tuple<number>
+            y: [minValue, maxValue + 1 || 10] as Tuple<number>
         }
     })()
 

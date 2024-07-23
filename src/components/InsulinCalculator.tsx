@@ -19,6 +19,7 @@ import SendIcon from '@mui/icons-material/Send'
 import { InputBolusDialog } from './InputBolusDialog'
 import { selectBolusAsMap } from '../store/reducers/bolus'
 import React from 'react'
+import { useEffect } from 'react'
 
 const numToStr = (num: number): string => (Math.round(num * 10) / 10).toFixed(1)
 interface IProps {
@@ -38,6 +39,37 @@ const AddBolusSuggestionButton = ({ totalInsulin }: IProps) => {
             </Button>
             <InputBolusDialog open={open} setOpen={setOpen} prefilledBolus={rounded} />
         </>
+    )
+}
+
+const RandomLocationGenerator = () => {
+    const sides = ['left', 'right']
+    const horizontally = ['right', 'middle', 'left']
+    const vertically = ['top', 'middle', 'bottom']
+
+    const getRandomElement = (array: Array<unknown>) =>
+        array[Math.floor(Math.random() * array.length)]
+
+    const getRandomString = () =>
+        `${getRandomElement(sides)} ${getRandomElement(horizontally)} ${getRandomElement(
+            vertically
+        )}`
+
+    const [randomString, setRandomString] = useState(getRandomString())
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setRandomString(getRandomString())
+        }, 60000) // Update every 60000ms (1 minute)
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId)
+    }, [])
+
+    return (
+        <div>
+            <p>Random location: {randomString}</p>
+        </div>
     )
 }
 
@@ -152,6 +184,7 @@ export const InsulinCalculator = () => {
                     </TableBody>
                 </Table>
             </Paper>
+            <RandomLocationGenerator />
         </>
     )
 }
